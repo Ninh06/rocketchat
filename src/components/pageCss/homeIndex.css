@@ -1,0 +1,127 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  flex-direction: column;
+}
+
+
+.chat-container {
+  display: flex;
+  max-width: 800px;
+  min-width: 800px;
+  min-height: 600px;
+  max-height: 600px;
+  margin: 20px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+  
+  .rooms-list {
+    flex: 1;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #3498db;
+    color: #fff;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .rooms-list-container {
+    height: 100%;
+    overflow-y: scroll;
+  }
+  
+  .rooms-list h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+.rooms-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .chat-area {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+  
+  #chat-messages {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+  }
+  
+  .message {
+    padding: 0 12px;
+    border-radius: 15px;
+    word-wrap: break-word;
+  }
+  
+  .message-input {
+    margin-top: auto;
+    display: flex;
+    align-items: center; /* Đảm bảo căn giữa theo chiều dọc */
+  }
+  
+  .message-input input {
+    flex: 3; /* Chiếm 3 phần chiều rộng */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px; /* Khoảng cách giữa input và button */
+    height: 40px; /* Đặt chiều cao cố định */
+    box-sizing: border-box;
+    margin-top: 16px;
+  }
+  
+  .message-input button {
+    flex: 1; /* Chiếm 1 phần chiều rộng */
+    padding: 10px;
+    border: none;
+    background-color: #3498db;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 40px; /* Chiều cao cố định giống input */
+    box-sizing: border-box;
+  }
+  
+  .logout {
+    display: block;
+    margin-top: 20px;
+    color: red;
+    text-decoration: none;
+  }
+  
+  .logout:hover {
+    text-decoration: underline;
+  }
+.connected-user-fullname {
+  display: block; /* Để nó hiển thị theo dòng riêng */
+  margin-top: 20px; /* Khoảng cách phía trên, giống logout */
+  color: #fff; /* Màu trắng */
+  text-align: left; /* Căn lề trái */
+}
+
+  
+  
