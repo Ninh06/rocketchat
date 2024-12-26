@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ApiService from '../service/ApiService';
 import '../pageCss/registerIndex.css'
 
@@ -12,6 +13,7 @@ const RegisterPage = () => {
   
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate(); 
   
     const handleChange = (e) => {
       const { name, value } = e.target;
@@ -21,7 +23,6 @@ const RegisterPage = () => {
       });
     };
   
-    // Gửi form đăng ký
     const handleSubmit = async (e) => {
       e.preventDefault();
       setMessage('');
@@ -35,8 +36,13 @@ const RegisterPage = () => {
           name: '',
           password: '',
         });
+
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
+
       } catch (err) {
-        setError(err.message || 'Đã có lỗi xảy ra.'); // Hiển thị lỗi
+        setError(err.message || 'Đã có lỗi xảy ra.'); 
       }
     };
   
