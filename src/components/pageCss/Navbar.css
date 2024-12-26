@@ -8,27 +8,24 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
     font-size: 20px;
-    position: fixed;  /* Gắn phần tử vào đầu trang */
+    position: fixed;  
     top: 0;
     left: 0;
-    width: 100%;  /* Chiều rộng đầy đủ */
-    z-index: 1000;  /* Đảm bảo navbar ở trên các phần tử khác */
+    width: 100%;  
+    z-index: 1000;  
   }
   
-  /* Đảm bảo nội dung trang không bị che khuất */
   body {
-    padding-top: 90px;  /* Thêm khoảng trống ở trên để navbar không che khuất nội dung */
+    padding-top: 90px;  
   }
   
-  /* Thương hiệu */
   .navbar-brand a {
     font-size: 24px;
     font-weight: bold;
-    color: #007F86;
+    color: #3498db;
     text-decoration: none;
   }
   
-  /* Danh sách điều hướng */
   .navbar-ul {
     list-style: none;
     display: flex;
@@ -54,6 +51,6 @@
   }
   
   .navbar-ul li a.active {
-    color: #84c7a8;
+    color: #3498db;
   }
   
