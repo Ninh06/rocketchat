@@ -9,17 +9,15 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(''); // Xóa lỗi trước đó
+    setError(''); 
 
     try {
       const loginData = { email, password };
       const response = await ApiService.loginUser(loginData);
 
-      // Lưu token vào localStorage
       localStorage.setItem('token', response.access_token);
       localStorage.setItem('refreshToken', response.refresh_token);
 
-      // Điều hướng sau khi đăng nhập thành công
       window.location.href = '/home';
     } catch (err) {
       setError(err.message || 'Đăng nhập thất bại. Vui lòng thử lại!');
