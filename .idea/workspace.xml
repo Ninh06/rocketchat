@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1770c45e-fbb7-4465-a425-b6b67ce24db4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    <list default="true" id="1770c45e-fbb7-4465-a425-b6b67ce24db4" name="Changes" comment="fix room ui and feature">
       <change beforePath="$PROJECT_DIR$/src/components/chat/HomePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chat/HomePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/service/ApiService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/service/ApiService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,6 +13,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="Ninh06 &lt;148368619+ninh06@users.noreply.github.com&gt;" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -77,11 +78,36 @@
       <workItem from="1735283911373" duration="1988000" />
       <workItem from="1735286688169" duration="3830000" />
       <workItem from="1735291089588" duration="1333000" />
-      <workItem from="1735292432894" duration="1372000" />
+      <workItem from="1735292432894" duration="1772000" />
     </task>
+    <task id="LOCAL-00001" summary="fix room ui and feature">
+      <option name="closed" value="true" />
+      <created>1735293911333</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1735293911333</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Update RegisterPage.jsx" />
+    <MESSAGE value="fix room ui and feature" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix room ui and feature" />
   </component>
 </project>
