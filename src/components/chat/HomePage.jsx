@@ -27,7 +27,6 @@ const HomePage = () => {
     //vào phòng
     const [showJoinRoomModal, setShowJoinRoomModal] = useState(false);
     const [joinRoomId, setJoinRoomId] = useState('');
-    const [joinRoomPassword, setJoinRoomPassword] = useState('');
 
     // detail room
     const [showRoomDetailsModal, setShowRoomDetailsModal] = useState(false);
@@ -39,9 +38,14 @@ const HomePage = () => {
 
     const [showRemoveModal, setShowRemoveModal] = useState(false);
     const [removeMemberIds, setRemoveMemberIds] = useState([]);
+    // const [selectedRoomDetails, setSelectedRoomDetails] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
+    // const [rooms, setRooms] = useState([]);
 
-    const [users, setUsers] = useState([]); // Stores the users fetched from the API
-    const [selectedUsers, setSelectedUsers] = useState([]); // Stores the selected users for invitation
+    const [users, setUsers] = useState([]); 
+    const [selectedUsers, setSelectedUsers] = useState([]); 
+
+    
 
     const searchUsersByName = async (searchTerm) => {
         try {
@@ -61,7 +65,7 @@ const HomePage = () => {
         if (e.target.checked) {
             setSelectedUsers((prev) => [...prev, user]);
         } else {
-            setSelectedUsers((prev) => prev.filter((u) => u?._id !== user._id)); // Remove user from selected users
+            setSelectedUsers((prev) => prev.filter((u) => u?._id !== user._id)); 
         }
     };
 
@@ -92,6 +96,7 @@ const HomePage = () => {
                 const userId = decodedToken._id;
                 const userInfo = await ApiService.getUserInfo(userId);
                 setUser(userInfo);
+                setCurrentUser(userInfo);
 
                 const userRooms = await ApiService.getRoomsList();
                 setRooms(userRooms);
@@ -117,32 +122,77 @@ const HomePage = () => {
             }
         };
     }, []);
+
     const handleJoinRoom = async (e) => {
         e.preventDefault();
         try {
             const roomJoinDto = {
                 roomId: joinRoomId,
-                password: roomType === 'private' ? joinRoomPassword : '',
             };
+    
             const roomData = await ApiService.joinRoom(roomJoinDto);
+    
+            // Thêm phòng mới vào danh sách
             setRooms((prevRooms) => [...prevRooms, roomData]);
             setShowJoinRoomModal(false);
             setJoinRoomId('');
-            setJoinRoomPassword('');
         } catch (error) {
             console.error('Error joining room:', error);
         }
     };
+    
+    //xoa nguoi
+    const isCurrentUserOwner = (roomDetails) => {
+        if (!roomDetails || !currentUser) return false;
+        return roomDetails.owners.some(owner => owner._id === currentUser._id);
+    };
 
     const handleRemoveSubmit = async () => {
+        if (!isCurrentUserOwner(selectedRoomDetails)) {
+            alert("You do not have permission to remove members.");
+            return;
+        }
+
+        if (removeMemberIds.length === 0) {
+            alert("Please select members to remove.");
+            return;
+        }
+
         try {
-            const response = await ApiService.deleteMemberFromRoom(selectedRoom, {members: removeMemberIds});
+            const response = await ApiService.deleteMemberFromRoom(selectedRoomDetails._id, { members: removeMemberIds });
             console.log("Member removed successfully:", response);
             setShowRemoveModal(false);
             setRemoveMemberIds([]);
         } catch (error) {
             console.error("Error removing member:", error);
         }
+    };
+
+    const handleRoomsRemoveMemberClick = async (roomId) => {
+        try {
+            const roomDetails = await ApiService.getRoomInfo(roomId); // Lấy thông tin phòng
+            setSelectedRoomDetails(roomDetails); // Cập nhật thông tin phòng
+
+            // Chỉ hiển thị modal nếu người dùng là chủ sở hữu
+            if (!isCurrentUserOwner(roomDetails)) {
+                alert("You do not have permission to remove members.");
+                return;
+            }
+
+            setShowRemoveModal(true);
+        } catch (error) {
+            console.error("Error fetching room details:", error);
+        }
+    };
+
+    const handleMemberSelection = (memberId) => {
+        setRemoveMemberIds((prev) => {
+            if (prev.includes(memberId)) {
+                return prev.filter((id) => id !== memberId);
+            } else {
+                return [...prev, memberId];
+            }
+        });
     };
 
 
@@ -211,29 +261,13 @@ const HomePage = () => {
             setRoomName('');
             setPassword('');
             setMembers([]);
+
+            window.location.reload();
         } catch (error) {
             console.error('Error creating room:', error);
         }
     };
-    const handleRoomsRemoveMemberClick = async (roomId) => {
-        try {
-            const roomDetails = await ApiService.getRoomInfo(roomId);
-            setSelectedRoomDetails(roomDetails);
-            setShowRemoveModal(true);
-        } catch (error) {
-            console.error('Error fetching room details:', error);
-        }
-    }
-
-    const handleMemberSelection = (memberId) => {
-        setRemoveMemberIds((prev) => {
-            if (prev.includes(memberId)) {
-                return prev.filter((id) => id !== memberId);
-            } else {
-                return [...prev, memberId];
-            }
-        });
-    };
+    
     // Modal style
     const modalStyle = {
         position: 'absolute',
@@ -252,8 +286,10 @@ const HomePage = () => {
             <div className="rooms-list">
                 <div className="rooms-list-container">
                     <h2>All Rooms</h2>
-                    <button onClick={() => setShowCreateRoomForm(true)}>Create Room</button>
-                    <button onClick={() => setShowJoinRoomModal(true)}>Join Room</button>
+                    <div className="buttons-container">
+                        <button onClick={() => setShowCreateRoomForm(true)}>Create Room</button>
+                        <button onClick={() => setShowJoinRoomModal(true)}>Join Room</button>
+                    </div>
                     {rooms.length > 0 ? (
                         <ul id="connectedRooms">
                             {rooms.map((room) => (
@@ -361,7 +397,8 @@ const HomePage = () => {
                     </div>
                 </Box>
             </Modal>
-            {"modal xóa"}
+
+            {/* modal xóa */}
             <Modal
                 className="remove-member"
                 open={showRemoveModal}
@@ -370,25 +407,26 @@ const HomePage = () => {
                 <Box sx={modalStyle}>
                     <Typography variant="h6" component="h2">Remove Members</Typography>
 
-                    {/* Select Members from Current Room */}
                     {selectedRoomDetails?.members?.length > 0 ? (
                         <div>
                             <Typography>Select members to remove:</Typography>
                             <ul>
-                                {selectedRoomDetails.members.map((member) => (
-                                    <li key={member._id}>
-                                        <label>
-                                            <input
-                                                type="checkbox"
-                                                name="memberToRemove"
-                                                value={member._id}
-                                                checked={removeMemberIds.includes(member._id)}
-                                                onChange={(e) => handleMemberSelection(e.target.value)}
-                                            />
-                                            {member.name}
-                                        </label>
-                                    </li>
-                                ))}
+                                {selectedRoomDetails.members
+                                    .filter(member => !selectedRoomDetails.owners.some(owner => owner._id === member._id)) 
+                                    .map((member) => (
+                                        <li key={member._id}>
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    name="memberToRemove"
+                                                    value={member._id}
+                                                    checked={removeMemberIds.includes(member._id)}
+                                                    onChange={(e) => handleMemberSelection(e.target.value)}
+                                                />
+                                                {member.name}
+                                            </label>
+                                        </li>
+                                    ))}
                             </ul>
                         </div>
                     ) : (
@@ -398,20 +436,21 @@ const HomePage = () => {
                     <div className="modal-buttons">
                         <button
                             className="modal-button invite-button"
-                            onClick={handleRemoveSubmit} // Handle the remove members action
-                            disabled={removeMemberIds.length === 0} // Disable button if no members are selected
+                            onClick={handleRemoveSubmit}
+                            disabled={removeMemberIds.length === 0} 
                         >
                             Remove
                         </button>
                         <button
                             className="modal-button cancel-button"
-                            onClick={() => setShowRemoveModal(false)} // Close the modal
+                            onClick={() => setShowRemoveModal(false)} 
                         >
                             Cancel
                         </button>
                     </div>
                 </Box>
             </Modal>
+
 
             <Modal
                 open={showCreateRoomForm}
@@ -454,10 +493,10 @@ const HomePage = () => {
                         )}
 
                         <div>
-                            <label>Members (IDs):</label>
+                            <label>Members (Name):</label>
                             <input
                                 type="text"
-                                placeholder="Comma separated IDs"
+                                placeholder="Comma separated Names"
                                 value={memberIds}
                                 onChange={async (e) => {
                                     setMemberIds(e.target.value);
@@ -511,18 +550,6 @@ const HomePage = () => {
                             />
                         </div>
 
-                        {rooms.some(room => room.roomType === 'private') && (
-                            <div>
-                                <label>Password:</label>
-                                <input
-                                    type="password"
-                                    value={joinRoomPassword}
-                                    onChange={(e) => setJoinRoomPassword(e.target.value)}
-                                    required
-                                />
-                            </div>
-                        )}
-
                         <Button type="submit">Join</Button>
                         <Button type="button" onClick={() => setShowJoinRoomModal(false)}>
                             Cancel
@@ -530,6 +557,8 @@ const HomePage = () => {
                     </form>
                 </Box>
             </Modal>
+
+
 
             <div className="chat-area">
                 {selectedRoom && (
@@ -560,7 +589,7 @@ const HomePage = () => {
                             messages.map((msg, index) => (
                                 <div
                                     key={index}
-                                    className={msg.sender?._id === user?._id ? 'text-end' : ''}
+                                    className={`message ${msg.sender?._id === user?._id ? 'text-end' : ''}`}
                                 >
                                     <strong>{msg.sender?.name}:</strong> {msg.content} {user?._id === msg.sender?._id}
 
