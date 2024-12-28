@@ -3,40 +3,73 @@ import { NavLink, useNavigate } from "react-router-dom";
 import ApiService from "../service/ApiService";
 import '../pageCss/Navbar.css';
 
-
-function Navbar(){
+function Navbar() {
     const isAuthenticated = ApiService.isAuthenticated();
     const isAdmin = ApiService.isAdmin();
     const isUser = ApiService.isUser();
     const navigate = useNavigate();
 
-    const handleLogout =() =>{
+    const handleLogout = () => {
         const isLogout = window.confirm("Bạn muốn đăng xuất ?");
-        if(isLogout) {
+        if (isLogout) {
             ApiService.logout();
-            navigate('/login')
+            navigate('/login');
         }
-    }
+    };
 
     return (
-        <nav className="navbar">
-            <div className="navbar-brand">
-                <NavLink to="/home">Chat App</NavLink>
+        <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+            <div className="container-fluid">
+                <NavLink className="navbar-brand" to="/home">Chat App</NavLink>
+                <button 
+                    className="navbar-toggler" 
+                    type="button" 
+                    data-bs-toggle="collapse" 
+                    data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" 
+                    aria-expanded="false" 
+                    aria-label="Toggle navigation"
+                >
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                <div className="collapse navbar-collapse" id="navbarNav">
+                    <ul className="navbar-nav ms-auto">
+                        <li className="nav-item">
+                            <NavLink className="nav-link" to="/home" activeClassName="active">Home</NavLink>
+                        </li>
+
+                        {isUser && (
+                            <li className="nav-item">
+                                <NavLink className="nav-link" to="/profile" activeClassName="active">Profile</NavLink>
+                            </li>
+                        )}
+                        {isAdmin && (
+                            <li className="nav-item">
+                                <NavLink className="nav-link" to="/admin" activeClassName="active">Admin</NavLink>
+                            </li>
+                        )}
+
+                        {!isAuthenticated && (
+                            <>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" to="/login" activeClassName="active">Login</NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" to="/register" activeClassName="active">Register</NavLink>
+                                </li>
+                            </>
+                        )}
+
+                        {isAuthenticated && (
+                            <li className="nav-item">
+                                <button className="btn btn-link nav-link" onClick={handleLogout}>Logout</button>
+                            </li>
+                        )}
+                    </ul>
+                </div>
             </div>
-            <ul className="navbar-ul">
-                <li><NavLink to="/home" activeclass="active"> Home </NavLink></li>
-
-                {isUser && <li><NavLink to="/profile" activeclass="active"> Profile </NavLink></li>}
-                {isAdmin && <li><NavLink to="/admin" activeclass="active"> Admin </NavLink></li>}
-
-                {!isAuthenticated && <li><NavLink to="/login" activeclass="active"> Login </NavLink></li>}
-                {!isAuthenticated && <li><NavLink to="/register" activeclass="active"> Register </NavLink></li>}
-
-                {isAuthenticated && <li onClick={handleLogout}> Logout </li>}
-            </ul>
         </nav>
-    )
-
+    );
 }
 
 export default Navbar;
