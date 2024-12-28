@@ -44,6 +44,11 @@ body {
     overflow-y: scroll;
   }
   
+  .buttons-container {
+    display: flex;
+    gap: 10px;
+}
+  
   .rooms-list h2 {
     font-size: 1.5rem;
     margin-bottom: 10px;
@@ -99,10 +104,14 @@ body {
   }
   
   .message {
-    padding: 0 12px;
+    padding: 10px 15px; 
     border-radius: 15px;
     word-wrap: break-word;
+    border: 1px solid #ddd; 
+    margin: 8px 0; 
+    background-color: #ffffff;
   }
+  
   
   .message-input {
     margin-top: auto;
