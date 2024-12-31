@@ -2,7 +2,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid #e3e3e3;
   transition: background-color 0.3s ease-in-out;
-  height: 72px;
+  height: 5px;
 }
 
 .navbar.fixed-top {
